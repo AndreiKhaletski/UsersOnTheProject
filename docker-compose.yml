@@ -1,0 +1,40 @@
+name: structure
+
+services:
+ user-service:
+  build: user-service
+  image: user:1.0.5
+  environment:
+    SPRING_PROFILES_ACTIVE: docker
+    DB_LOGIN: works_app
+    DB_PASSWORD: 855312
+  networks:
+   - structure-network
+ pg_db:
+  build: postgresql
+  image: postgresql-structure:1.0.2
+  environment:
+   POSTGRES_USER: structure_admin
+   POSTGRES_PASSWORD: 855312
+  networks:
+   - structure-network
+ pgadmin:
+  build: pgadmin
+  image: pgadmin-structure:1.0.2
+  environment:
+   PGADMIN_DEFAULT_EMAIL: admin@structure.com
+   PGADMIN_DEFAULT_PASSWORD: structure
+  ports:
+   - 85:80
+  networks:
+   - structure-network
+ proxy:
+  build: proxy
+  image: proxy-structure:1.0.2
+  ports:
+   - 80:80
+  networks:
+   - structure-network
+   
+networks:
+ structure-network:
